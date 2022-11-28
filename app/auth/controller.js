@@ -12,7 +12,6 @@ const register = async (req, res, next) => {
         await user.save()
         return res.json(user)
     } catch (err) {
-
         if (err && err.name === 'ValidationError') {
             return res.json({
                 error: 1,
