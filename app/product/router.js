@@ -8,7 +8,6 @@ router.get("/products", productController.index);
 router.post(
   "/products",
   multer({ dest: os.tmpdir() }).single("image_url"),
-  police_check("create", "Product"),
   productController.store
 );
 router.put(
@@ -16,10 +15,7 @@ router.put(
   multer({ dest: os.tmpdir() }).single("image_url"),
   productController.update
 );
-router.delete(
-  "/products/:id",
-  police_check("delete", "Product"),
-  productController.destroy
-);
+router.delete("/products/:id", productController.destroy);
+router.post("/products/:id", productController.compressImage);
 
 module.exports = router;

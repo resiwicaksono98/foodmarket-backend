@@ -1,15 +1,9 @@
-const router = require('express').Router()
-const { police_check } = require('../../middleware/index')
-const cartController = require('./controller')
+const router = require("express").Router();
+const { police_check } = require("../../middleware/index");
+const cartController = require("./controller");
 
-router.put('/carts',
-   
-    cartController.update
-)
+router.put("/carts", cartController.update);
 
-router.get('/carts',
-    police_check('read', 'Cart'),
-    cartController.index
-)
+router.get("/carts", cartController.index);
 
-module.exports = router
+module.exports = router;

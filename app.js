@@ -6,6 +6,8 @@ var logger = require("morgan");
 const cors = require("cors");
 const session = require("express-session");
 const MongoDBStore = require("connect-mongodb-session")(session);
+const cron = require("node-cron");
+// Service Router
 const productRoutes = require("./app/product/router");
 const categoryRoutes = require("./app/category/router");
 const tagRoutes = require("./app/tags/router");
@@ -14,7 +16,10 @@ const deliveryAddressRoutes = require("./app/deliveryAddress/router");
 const cartRoutes = require("./app/cart/router");
 const orderRoutes = require("./app/order/router");
 const invoiceRoutes = require("./app/invoice/router");
+const paymentRouter = require("./app/payment/router");
+
 const { secretKey } = require("./app/config");
+const { syncPaymentData } = require("./middleware/syncPaymentData");
 
 var app = express();
 
@@ -53,6 +58,11 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
+// Set Schedule sync payment midtrans and database
+cron.schedule("*/5 * * * *", () => {
+  syncPaymentData();
+});
+
 app.use("/api", productRoutes);
 app.use("/api", categoryRoutes);
 app.use("/api", tagRoutes);
@@ -61,6 +71,7 @@ app.use("/api", deliveryAddressRoutes);
 app.use("/api", cartRoutes);
 app.use("/api", orderRoutes);
 app.use("/api", invoiceRoutes);
+app.use("/api", paymentRouter);
 // Home
 app.use("/", function (req, res) {
   res.render("index", {

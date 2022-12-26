@@ -4,6 +4,8 @@ const config = require("../app/config");
 const User = require("../app/user/model");
 
 const verifyUser = async (req, res, next) => {
+  if (!req.session.token)
+    return res.status(401).json({ message: "Please login your account" });
   let token = req.session.token;
   if (!jwt.JsonWebTokenError)
     return res.status(401).json({ msg: "Please login your account" });
@@ -17,7 +19,6 @@ const verifyUser = async (req, res, next) => {
   }
   next();
 };
-
 // function decodeToken() {
 //   return async function (req, res, next) {
 //     try {

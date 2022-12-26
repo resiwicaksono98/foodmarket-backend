@@ -1,16 +1,10 @@
-const router = require('express').Router()
-const { police_check } = require('../../middleware')
-const categoryController = require('./controller')
+const router = require("express").Router();
+const { verifyUser } = require("../../middleware");
+const categoryController = require("./controller");
 
-router.post('/categories',
-    police_check('create', 'Category'),
-    categoryController.store)
-router.get('/categories', categoryController.index)
-router.put('/categories/:id',
-    police_check('update', 'Category'),
-    categoryController.update)
-router.delete('/categories/:id',
-    police_check('delete', 'Category'),
-    categoryController.destroy)
+router.post("/categories", verifyUser, categoryController.store);
+router.get("/categories", categoryController.index);
+router.put("/categories/:id", verifyUser, categoryController.update);
+router.delete("/categories/:id", verifyUser, categoryController.destroy);
 
-module.exports = router
+module.exports = router;

@@ -1,8 +1,6 @@
-const router = require('express').Router()
-const { police_check } = require('../../middleware')
-const invoiceController = require('./controller')
+const router = require("express").Router();
+const invoiceController = require("./controller");
 
-router.get('/invoice/:order_id', 
-invoiceController.show)
+router.get("/invoice/:order_id", invoiceController.show);
 
-module.exports = router
+module.exports = router;

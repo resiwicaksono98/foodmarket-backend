@@ -1,20 +1,20 @@
-const router = require('express').Router()
-const { police_check } = require('../../middleware/index')
-const deliveryAddressController = require('./controller')
+const router = require("express").Router();
+const { verifyUser } = require("../../middleware");
+const deliveryAddressController = require("./controller");
 
-router.post('/delivery-address',
-    police_check('create', 'DeliveryAddress'),
-    deliveryAddressController.store
-)
-router.get('/delivery-address',
-police_check('view', 'DeliveryAddress'),
-deliveryAddressController.index)
+router.post("/delivery-address", verifyUser, deliveryAddressController.store);
+router.get("/delivery-address", verifyUser, deliveryAddressController.index);
 
-router.put('/delivery-address/:id',
-    police_check('update', 'DeliveryAddress'),
-    deliveryAddressController.update
-)
+router.put(
+  "/delivery-address/:id",
+  verifyUser,
+  deliveryAddressController.update
+);
 
-router.delete('/delivery-address/:id',deliveryAddressController.destory)
+router.delete(
+  "/delivery-address/:id",
+  verifyUser,
+  deliveryAddressController.destory
+);
 
-module.exports = router
+module.exports = router;

@@ -1,34 +1,33 @@
-const Invoice = require('./model')
-const { policyFor } = require('../../utils/index');
-const { subject } = require('@casl/ability');
+const Invoice = require("./model");
+const { coreApi } = require("../../utils/midtrans");
 
 const show = async (req, res, next) => {
-    try {
-        let { order_id } = req.params
-        let invoice = await Invoice.findOne({ order: order_id })
-            .populate('order')
-            .populate('user', '-token -password -createdAt -updatedAt -role')
-            
-            
-        let policy = policyFor(req.user);
-        let subjectInvoice = subject('Invoice', { ...invoice, user_id: invoice.user._id })
-        if (!policy.can('read', subjectInvoice)) {
-            return res.json({
-                error: 1,
-                message: 'Anda tidak memiliki akses untuk melihat invoice ini'
-            })
+  try {
+    let { order_id } = req.params;
+    coreApi.transaction
+      .status(order_id)
+      .then(async (result) => {
+        if (result.transaction_status == "settlement") {
+          await Invoice.findOneAndUpdate(
+            { order: order_id },
+            { payment_status: "paid" }
+          );
+        } else if (result.transaction_status === "cancel") {
+          await Invoice.findOneAndUpdate(
+            { order: order_id },
+            { payment_status: "cancel" }
+          );
         }
-        return res.json(invoice)
-    } catch (err) {
-        if (err && err.name === 'ValidationError') {
-            res.json({
-                errpr: 1,
-                message: 'Error when getting invoice',
-                fields: err.errors
-            })
-        }
-        next(err)
-    }
-}
+      })
+      .catch((err) => {});
+    let invoice = await Invoice.findOne({ order: order_id })
+      .populate("order")
+      .populate("user", "-token -password -createdAt -updatedAt -role");
 
-module.exports = { show }
+    return res.json(invoice);
+  } catch (err) {
+    return res.status(404).json({ message: "Invoice not found" });
+  }
+};
+
+module.exports = { show };
