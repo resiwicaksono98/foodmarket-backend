@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "start": "DEBUG=food-server:* node ./bin/www",
+    "build": "DEBUG=food-server:* node ./bin/www",
     "dev": "DEBUG=food-server:* nodemon ./bin/www"
   },
   "dependencies": {
@@ -31,6 +32,7 @@
     "sharp": "^0.25.2"
   },
   "devDependencies": {
-    "@tailwindcss/aspect-ratio": "^0.4.2"
+    "@tailwindcss/aspect-ratio": "^0.4.2",
+    "webpack": "^5.75.0"
   }
 }
