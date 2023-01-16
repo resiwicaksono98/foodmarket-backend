@@ -1,3 +1,5 @@
+/** @format */
+
 var createError = require("http-errors");
 var express = require("express");
 var path = require("path");
@@ -28,29 +30,29 @@ app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "pug");
 
 const store = new MongoDBStore({
-  uri: "mongodb://localhost:27017/foodstore",
-  collection: "session",
+   uri: "mongodb+srv://resiwicaksono:thonkwaq123@cluster0.a3dlh.mongodb.net/?retryWrites=true&w=majority",
+   collection: "session",
 });
 // Set Session
 app.use(
-  session({
-    name: "kepo",
-    secret: secretKey,
-    resave: false,
-    saveUninitialized: false,
-    store: store,
-    cookie: {
-      secure: "auto",
-      httpOnly: true,
-      maxAge: 1000 * 60 * 60 * 24 * 1, // 1 Day
-    },
-  })
+   session({
+      name: "kepo",
+      secret: secretKey,
+      resave: false,
+      saveUninitialized: false,
+      store: store,
+      cookie: {
+         secure: "auto",
+         httpOnly: true,
+         maxAge: 1000 * 60 * 60 * 24 * 1, // 1 Day
+      },
+   })
 );
 app.use(
-  cors({
-    credentials: true,
-    origin: ["http://localhost:5173", "http://localhost:4173"],
-  })
+   cors({
+      credentials: true,
+      origin: ["http://localhost:5173", "http://localhost:4173"],
+   })
 );
 app.use(logger("dev"));
 app.use(express.json());
@@ -60,7 +62,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 // Set Schedule sync payment midtrans and database
 cron.schedule("*/5 * * * *", () => {
-  syncPaymentData();
+   syncPaymentData();
 });
 
 app.use("/api", productRoutes);
@@ -74,25 +76,25 @@ app.use("/api", invoiceRoutes);
 app.use("/api", paymentRouter);
 // Home
 app.use("/", function (req, res) {
-  res.render("index", {
-    title: "Food Server",
-  });
+   res.render("index", {
+      title: "Food Server",
+   });
 });
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
-  next(createError(404));
+   next(createError(404));
 });
 
 // error handler
 app.use(function (err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get("env") === "development" ? err : {};
+   // set locals, only providing error in development
+   res.locals.message = err.message;
+   res.locals.error = req.app.get("env") === "development" ? err : {};
 
-  // render the error page
-  res.status(err.status || 500);
-  res.render("error");
+   // render the error page
+   res.status(err.status || 500);
+   res.render("error");
 });
 
 module.exports = app;
