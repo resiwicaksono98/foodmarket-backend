@@ -2,6 +2,7 @@
   "name": "food-server",
   "version": "0.0.0",
   "main": "app.js",
+  "license": "MIT",
   "scripts": {
     "start": "DEBUG=food-server:* node ./bin/www",
     "build": "DEBUG=food-server:* node ./bin/www",
