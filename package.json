@@ -1,7 +1,7 @@
 {
   "name": "food-server",
   "version": "0.0.0",
-  "private": true,
+  "main": "app.js",
   "scripts": {
     "start": "DEBUG=food-server:* node ./bin/www",
     "build": "DEBUG=food-server:* node ./bin/www",
